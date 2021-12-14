@@ -7,9 +7,17 @@ import pandas as pd
 import numpy as np
 import pickle
 import os
+import csv
 
 ## Paths
 processed_folder = os.path.dirname(os.path.realpath(__file__)) + '/processed/'
+
+
+def read_csv_data(filename):
+    with open(filename) as f:
+        a = [{k: v for k, v in row.items()}
+            for row in csv.DictReader(f, skipinitialspace=True)]
+    return a
 
 class Data:
     """
@@ -90,7 +98,7 @@ class Data:
         This could be later enhanced by allowing imprecise inputs
         """
         if type(occ_title) == str:
-            return self.occupations[self.occupations.preferred_label==occ_title].iloc[0].id
+            return int(self.occupations[occ_title]["id"])
         else:
             return occ_title
 
@@ -127,7 +135,10 @@ class Data:
     def occupations(self):
         """ ESCO occupations with their full descriptions """
         if self._occupations is None:
-            self._occupations = self.read_csv(self.dir + 'ESCO_occupations.csv')
+            _occupations_temp = read_csv_data(self.dir + 'ESCO_occupations.csv')
+            self._occupations = {}
+            for occ in _occupations_temp:
+                self.occupations[occ['preferred_label']] = occ
         return self._occupations
 
     @property
