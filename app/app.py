@@ -38,17 +38,15 @@ def get_transitions(job: JobDetails):
         transpose=False, # If job_i describes a jobseeker, set to False; if job_i describes a vacancy, set to True
         ).round(2)
     dicts = transitions[1:6].to_dict("records")
-    # for transition in dicts:
-    #     transition["name"] = transition["preferred_label"]
-    #     transition["skills"] = trans_utils.show_skills_overlap(
-    #         job_i=job_i, # Origin occupation ID
-    #         job_j=transition["id"], # Destination occupation ID
-    #         skills_match='optional',
-    #         verbose=False)[["origin_skill","destination_skill","similarity"]].to_dict("records")
-    #     transition.pop("preferred_label", None)
-    #     transition.pop("id", None)
-    #     desired_order_list = [2, 1, 3]
-    #     transition = {k: transition[k] for k in transition}
+    for transition in dicts:
+        transition["name"] = transition["preferred_label"]
+        transition["skills"] = trans_utils.show_skills_overlap(
+            job_i=job_i, # Origin occupation ID
+            job_j=transition["id"], # Destination occupation ID
+            skills_match='optional',
+            verbose=False)[["origin_skill","destination_skill","similarity"]].to_dict("records")
+        transition.pop("preferred_label", None)
+        transition.pop("id", None)
     return dicts
 
 # 5. Run the API with uvicorn
