@@ -5,6 +5,7 @@ import transition_utils as trans_utils
 import pandas as pd
 from pydantic import BaseModel
 from operator import itemgetter
+import random
 
 
 app = FastAPI()
@@ -50,10 +51,14 @@ def get_transitions(job: JobDetails):
                     "similarity":1
                 }
             if skill["skill_id"] not in skill_ids:
+                if random.randint(0,1) == 1:
+                    similarity = random.uniform(0,1)
+                else:
+                    similarity = 0
                 skill_dict = {
                     "origin_skill":skill["preferred_label"],
                     "destination_skill":skill["preferred_label"],
-                    "similarity":0
+                    "similarity":similarity
                 }
             transition["temp_skills"].append(skill_dict)
         transition["skills"] = sorted(transition["temp_skills"], key=itemgetter("similarity"), reverse=True)
@@ -66,7 +71,7 @@ def get_transitions(job: JobDetails):
         # This code above is super slow so i've bashed in some horrible code for now.
 
         transition.pop("preferred_label", None)
-        transition.pop("tempt_skills", None)
+        transition.pop("temp_skills", None)
         transition.pop("id", None)
     return dicts
 
