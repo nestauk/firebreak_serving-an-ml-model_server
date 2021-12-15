@@ -31,7 +31,7 @@ data = load_data.Data()
 sim = load_data.Similarities()
 
 # Import default skills description embeddings
-embeddings = np.load(f'{useful_paths.data_dir}interim/embeddings/embeddings_skills_description_SBERT.npy')
+embeddings = np.load('data/interim/embeddings/embeddings_skills_description_SBERT.npy')
 
 ### SET UP DEFAULT TRANSITION FILTERING CRITERIA ###
 

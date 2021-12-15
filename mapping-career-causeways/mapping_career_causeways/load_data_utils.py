@@ -14,8 +14,8 @@ import os
 import mapping_career_causeways
 
 ## Paths
-useful_paths = mapping_career_causeways.Paths()
-processed_folder = useful_paths.data_dir + 'processed/'
+
+processed_folder = 'data/processed/'
 
 class Data:
     """
