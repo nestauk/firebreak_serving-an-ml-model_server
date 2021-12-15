@@ -61,6 +61,7 @@ class Data:
         self._top_occ_ids = None
         self._occ_report = None
         self._report_occ_ids = None
+        self._occ_lookup = None
 
     ### Helper functions
     def read_csv(self, path):
@@ -206,6 +207,15 @@ class Data:
         if self._occ_risk is None:
             self._occ_risk = self.read_csv(self.dir + 'ESCO_automation_risk_full.csv')
         return self._occ_risk
+
+    @property
+    def occ_lookup(self):
+        if self._occ_lookup is None:
+            _temp_occ_lookup = read_csv_data(self.dir + 'ISCO_lookup.csv')
+            self._occ_lookup = {}
+            for occ in _temp_occ_lookup:
+                self._occ_lookup[occ["id"]] = occ
+        return self._occ_lookup
 
     def occ_risk_report(self):
         """

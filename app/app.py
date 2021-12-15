@@ -41,6 +41,8 @@ def get_transitions(job: JobDetails):
     dicts = transitions[1:6].to_dict("records")
     for transition in dicts:
         transition["name"] = transition["preferred_label"]
+        transition["group_name"] = data.occ_lookup[str(transition["id"])]["group_name"]
+        transition["occ_description"] = data.occ_lookup[str(transition["id"])]["group_description"]
         skills = data.occupation_skills(transition["id"], skill_importance=skill_type).to_dict('records')
         transition["temp_skills"] = []
         for skill in skills:
