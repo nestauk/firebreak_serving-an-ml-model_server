@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+numpy==1.20
+pandas
+PyYAML
+sklearn
+scipy
+numba
