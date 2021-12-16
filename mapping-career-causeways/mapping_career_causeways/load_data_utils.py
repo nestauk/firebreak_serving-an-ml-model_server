@@ -12,10 +12,17 @@ import numpy as np
 import pickle
 import os
 import mapping_career_causeways
+import csv
 
 ## Paths
 useful_paths = mapping_career_causeways.Paths()
 processed_folder = useful_paths.data_dir + 'processed/'
+
+def read_csv_data(filename):
+    with open(filename) as f:
+        a = [{k: v for k, v in row.items()}
+            for row in csv.DictReader(f, skipinitialspace=True)]
+    return a
 
 class Data:
     """
@@ -47,6 +54,7 @@ class Data:
 
         # Skills-based sectors and sub-sectors
         self._occ_clusters = None
+        self._occ_lookup = None
         self._clusters_level_1 = None
         self._clusters_level_2 = None
         self._skills_based_sectors = None
@@ -133,8 +141,20 @@ class Data:
     def occupations(self):
         """ ESCO occupations with their full descriptions """
         if self._occupations is None:
-            self._occupations = self.read_csv(self.dir + 'ESCO_occupations.csv')
+            _occupations_temp = read_csv_data(self.dir + 'ESCO_occupations.csv')
+            self._occupations = {}
+            for occ in _occupations_temp:
+                self.occupations[occ['preferred_label']] = occ
         return self._occupations
+
+    @property
+    def occ_lookup(self):
+        if self._occ_lookup is None:
+            _temp_occ_lookup = read_csv_data(self.dir + 'ISCO_lookup.csv')
+            self._occ_lookup = {}
+            for occ in _temp_occ_lookup:
+                self._occ_lookup[occ["id"]] = occ
+        return self._occ_lookup
 
     @property
     def occupation_hierarchy(self):
